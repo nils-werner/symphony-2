@@ -435,6 +435,8 @@ var Symphony = {};
 	 */
 	$(document).ready(function() {
 
+		window.location.href = window.location.href + '#nav';
+
 		// Initialize Symphony
 		Symphony.init();
 
