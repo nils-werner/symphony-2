@@ -435,6 +435,7 @@ var Symphony = {};
 	 */
 	$(document).ready(function() {
 
+		// Append #nav to the url to hide the title on smaller screens by scrolling down
 		window.location.href = window.location.href + '#nav';
 
 		// Initialize Symphony
