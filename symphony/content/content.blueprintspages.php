@@ -686,6 +686,16 @@
 				if(trim($fields['type']) != '' && preg_match('/(index|404|403)/i', $fields['type'])) {
 					$types = preg_split('/\s*,\s*/', strtolower($fields['type']), -1, PREG_SPLIT_NO_EMPTY);
 
+					$contenttypes = 0;
+
+					if(in_array('json', $types)) $contenttypes++;
+					if(in_array('text', $types)) $contenttypes++;
+					if(in_array('xml', $types)) $contenttypes++;
+
+					if($contenttypes > 1) {
+						$this->_errors['type'] = __('A page cannot have more than one content type.');
+					}
+
 					if(in_array('index', $types) && PageManager::hasPageTypeBeenUsed($page_id, 'index')) {
 						$this->_errors['type'] = __('An index type page already exists.');
 					}
