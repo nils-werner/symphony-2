@@ -549,7 +549,7 @@
 		 * 'index', 'XML', 'admin', '404' and '403'.
 		 */
 		public static function fetchAvailablePageTypes(){
-			$system_types = array('index', 'XML', 'admin', '404', '403');
+			$system_types = array('index', 'XML', 'JSON', 'plaintext', 'admin', '404', '403');
 
 			$types = PageManager::fetchPageTypes();
 

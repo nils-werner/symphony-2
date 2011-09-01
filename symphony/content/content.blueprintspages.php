@@ -689,7 +689,7 @@
 					$contenttypes = 0;
 
 					if(in_array('json', $types)) $contenttypes++;
-					if(in_array('text', $types)) $contenttypes++;
+					if(in_array('plaintext', $types)) $contenttypes++;
 					if(in_array('xml', $types)) $contenttypes++;
 
 					if($contenttypes > 1) {

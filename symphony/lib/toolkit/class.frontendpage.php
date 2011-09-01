@@ -195,7 +195,7 @@
 					if(in_array('XML', $this->_pageData['type']) || in_array('xml', $this->_pageData['type'])) {
 						$this->addHeaderToPage('Content-Type', 'text/xml; charset=utf-8');
 					}
-					else if(in_array('Text', $this->_pageData['type']) || in_array('text', $this->_pageData['type'])) {
+					else if(in_array('Plaintext', $this->_pageData['type']) || in_array('plaintext', $this->_pageData['type'])) {
 						$this->addHeaderToPage('Content-Type', 'text/plain; charset=utf-8');
 					}
 					else if(in_array('JSON', $this->_pageData['type']) || in_array('json', $this->_pageData['type'])) {
