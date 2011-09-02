@@ -451,6 +451,13 @@ Options +FollowSymlinks -Indexes
 				}
 				catch(Exception $ex) {}
 			}
+			
+			if(version_compare($existing_version, '2.3dev', '<')) {
+				try {
+					$frontend->Database->query('UPDATE TABLE `tbl_pages_types` SET `type` = \'text/xml\' WHERE `type` IN(\'xml\',\'XML\');');
+				}
+				catch(Exception $ex) {}
+			}
 
 		// Symphony 2.3
 
