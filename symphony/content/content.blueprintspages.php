@@ -688,9 +688,11 @@
 
 					$contenttypes = 0;
 
-					if(in_array('json', $types)) $contenttypes++;
-					if(in_array('plaintext', $types)) $contenttypes++;
-					if(in_array('xml', $types)) $contenttypes++;
+					foreach($types AS $type) {
+						if(preg_match('#^[-\w+]+/[-\w+]+$#', $type)) {
+							$contenttypes++;
+						}
+					}
 
 					if($contenttypes > 1) {
 						$this->_errors['type'] = __('A page cannot have more than one content type.');

@@ -192,17 +192,12 @@
 				));
 
 				if (is_null($devkit)) {
-					if(in_array('XML', $this->_pageData['type']) || in_array('xml', $this->_pageData['type'])) {
-						$this->addHeaderToPage('Content-Type', 'text/xml; charset=utf-8');
-					}
-					else if(in_array('Plaintext', $this->_pageData['type']) || in_array('plaintext', $this->_pageData['type'])) {
-						$this->addHeaderToPage('Content-Type', 'text/plain; charset=utf-8');
-					}
-					else if(in_array('JSON', $this->_pageData['type']) || in_array('json', $this->_pageData['type'])) {
-						$this->addHeaderToPage('Content-Type', 'application/json; charset=utf-8');
-					}
-					else{
-						$this->addHeaderToPage('Content-Type', 'text/html; charset=utf-8');
+					$this->addHeaderToPage('Content-Type', 'text/html; charset=utf-8');
+					
+					foreach($this->_pageData['type'] AS $type) {
+						if(preg_match('#^[-\w+]+/[-\w+]+$#', $type)) {
+							$this->addHeaderToPage('Content-Type', $type . '; charset=utf-8');
+						}
 					}
 
 					if(in_array('404', $this->_pageData['type'])){
