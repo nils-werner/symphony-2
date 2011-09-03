@@ -689,7 +689,7 @@
 					$contenttypes = 0;
 
 					foreach($types AS $type) {
-						if(preg_match('#^[-\w+]+/[-\w+]+$#', $type)) {
+						if(preg_match('#^[\.\-\w+]+/[\.\-\w+]+$#', $type)) {
 							$contenttypes++;
 						}
 					}

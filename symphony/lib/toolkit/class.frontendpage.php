@@ -195,7 +195,7 @@
 					$this->addHeaderToPage('Content-Type', 'text/html; charset=utf-8');
 					
 					foreach($this->_pageData['type'] AS $type) {
-						if(preg_match('#^[-\w+]+/[-\w+]+$#', $type)) {
+						if(preg_match('#^[\.\-\w+]+/[\.\-\w+]+$#', $type)) {
 							$this->addHeaderToPage('Content-Type', $type . '; charset=utf-8');
 						}
 					}
