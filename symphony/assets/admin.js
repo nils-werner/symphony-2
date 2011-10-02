@@ -404,6 +404,17 @@ var Symphony = {};
 						'hours': Math.floor(time / 60)
 					});
 				}
+			},
+			
+			
+			reorder: function() {
+				$.each(['error','success','notice'], function(index, value) { 
+					if($('.' + value).length > 0) {
+						var element = $('<div class="noticecarousel ' + value + '"></div>');
+						$('.notice.' + value).appendTo(element);
+						$('#header').prepend(element);
+					}
+				});
 			}
 
 		},
@@ -434,7 +445,6 @@ var Symphony = {};
 	 * Symphony core interactions
 	 */
 	$(document).ready(function() {
-
 		// Initialize Symphony
 		Symphony.init();
 
@@ -526,6 +536,8 @@ var Symphony = {};
 			$(item).find('.header > span > i').remove();
 		});
 		duplicator.trigger('restorestate');
+		
+		Symphony.Message.reorder();
 
 		// Dim system messages
 		Symphony.Message.fade('silence', 10000);

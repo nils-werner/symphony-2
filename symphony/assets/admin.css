@@ -581,7 +581,7 @@ button.delete:focus,
 	Globals - System Messages
 -----------------------------------------------------------------------------*/
 
-.notice {
+p.notice {
 	position: relative;
 	z-index: 2;
 	margin: 0;
@@ -592,38 +592,44 @@ button.delete:focus,
 	background: #efefed;
 	height: 20px;
 }
-.notice.error {
+p.notice.error {
 	background-color: #fff9a2;
 	border-color: #e7a973;
 }
-.notice.success {
+p.notice.success {
 	background-color: #bfdc96;
 	border-color: #90c349;
 }
-.notice.silence {
+p.notice.silence {
 	background: #e4e4e0;
 	border-top-color: #979792;
 	border-bottom-color: #777;
 	color: #555;
 }
-.notice a,
-.notice button {
+p.notice a,
+p.notice button {
 	color: rgba(0, 0, 0, 0.7);
 	margin-left: 0.5em;
 	text-decoration: none;
 	border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 }
-.notice a:hover,
-.notice button:hover {
+p.notice a:hover,
+p.notice button:hover {
 	color: rgba(0, 0, 0, 0.8);
 	border-bottom: 1px solid rgba(0, 0, 0, 0.4);
 	text-decoration: none;
 }
-.notice button {
+p.notice button {
 	border: none;
 	background: none;
 	text-decoration: underline;
 	cursor: pointer;
+}
+p.notice:nth-of-type(1) {
+	border-top-width: 3px;
+}
+p.notice:nth-last-of-type(1) {
+	border-bottom-width: 2px;
 }
 
 /*-----------------------------------------------------------------------------
