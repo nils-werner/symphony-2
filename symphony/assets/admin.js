@@ -408,7 +408,7 @@ var Symphony = {};
 			
 			
 			reorder: function() {
-				$.each(['error','success','notice'], function(index, value) { 
+				$.each(['notice', 'success', 'error'], function(index, value) { 
 					if($('.' + value).length > 0) {
 						var element = $('<div class="noticecarousel ' + value + '"></div>');
 						$('.notice.' + value).appendTo(element);
