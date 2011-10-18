@@ -419,8 +419,8 @@ var Symphony = {};
 				$.each(['notice', 'success'], function(index, value) {
 					$('.noticegroup.' + value).each(function() {
 						$(this).addClass("noticecarousel");
-						var element = $('<a href="" class="prev">&lt;</a><a href="next">&gt;</a>');
-						$(this).append(element);
+						var element = $('<p class="noticecarousel nav"><a href="" class="prev">&lt;</a><a href="next">&gt;</a></p>');
+						$(this).prepend(element);
 					});
 				});
 			}

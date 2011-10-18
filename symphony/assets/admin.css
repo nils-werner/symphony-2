@@ -631,6 +631,22 @@ p.notice:nth-of-type(1) {
 p.notice:nth-last-of-type(1) {
 	border-bottom-width: 2px;
 }
+p.noticecarousel.nav {
+	position: absolute;
+	right: 0px;
+	margin-top: 3px;
+	z-index: 1000;
+}
+p.noticecarousel.nav a {
+	text-decoration: none;
+	border: 1px solid #bfbfb7;
+	padding: 1px;
+	margin: 1px;
+}
+.noticegroup.success p.noticecarousel.nav a {
+	border-color: #90c349;
+}
+
 
 /*-----------------------------------------------------------------------------
 	Header
