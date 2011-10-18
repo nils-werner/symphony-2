@@ -410,10 +410,18 @@ var Symphony = {};
 			reorder: function() {
 				$.each(['notice', 'success', 'error'], function(index, value) { 
 					if($('.' + value).length > 0) {
-						var element = $('<div class="noticecarousel ' + value + '"></div>');
+						var element = $('<div class="noticegroup ' + value + '"></div>');
 						$('.notice.' + value).appendTo(element);
 						$('#header').prepend(element);
 					}
+				});
+				
+				$.each(['notice', 'success'], function(index, value) {
+					$('.noticegroup.' + value).each(function() {
+						$(this).addClass("noticecarousel");
+						var element = $('<a href="" class="prev">&lt;</a><a href="next">&gt;</a>');
+						$(this).append(element);
+					});
 				});
 			}
 
