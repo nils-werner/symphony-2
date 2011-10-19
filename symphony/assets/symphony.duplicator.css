@@ -57,6 +57,18 @@
 .duplicator > .controls {
 	clear: left;
 	background: #aaaaaa;
+	background: -moz-linear-gradient(
+		bottom,
+		#9E9E9E,
+		#B8B8B8
+	);
+	background-image: -webkit-gradient(
+	    linear,
+	    left bottom,
+	    left top,
+	    color-stop(0, #9E9E9E),
+	    color-stop(1, #B8B8B8)
+	);
 	cursor: default;
 	padding: 0 1.75em;
 /*	position: relative;*/
