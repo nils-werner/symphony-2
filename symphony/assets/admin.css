@@ -691,13 +691,13 @@ body, html {
 		linear,
 		left top,
 		left bottom,
-		color-stop(0, #efefef),
-		color-stop(1, #d7d7d7)
+		color-stop(0, #DBDBDB),
+		color-stop(1, #C2C2C2)
 	);
 	background: -moz-linear-gradient(
 		top,
-		#efefef,
-		#d7d7d7
+		#DBDBDB,
+		#C2C2C2
 	);
 	border-bottom: 1px solid #bfbfbf;
 	-webkit-box-shadow: 0 0 6px rgba(0, 0, 0, 0.3);
@@ -734,7 +734,7 @@ body, html {
 	line-height: 30px;
 	padding: 0 10px;
 	position: relative;
-	text-shadow: 0 1px 0 rgba(255, 255, 255, 0.3);
+	text-shadow: 0 1px 0 rgba(255, 255, 255, 0.6);
 	z-index: 3;
 	cursor: pointer;
 }
