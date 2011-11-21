@@ -27,7 +27,8 @@
 				array(__('Name'), 'col'),
 				array(__('Components'), 'col'),
 				array(__('Used in'), 'col'),
-				array(__('Linked from'), 'col')
+				array(__('Linked from'), 'col'),
+				array(__('Author'), 'col')
 			);
 
 			$aTableBody = array();
@@ -54,12 +55,21 @@
 							SYMPHONY_URL . '/blueprints/utilities/edit/' . str_replace('.xsl', '', $u) . '/')
 					);
 					
-					$xsl = file_get_contents(UTILITIES . '/' .  $u);
-					$xsl = @new SimpleXMLElement($xsl);
-					
-					$components = $xsl->xpath("*[local-name()='template' or local-name()='function']");
 					$linking = array();
 					$using = array();
+					$authors = array();
+					
+					$xsl = file_get_contents(UTILITIES . '/' .  $u);
+					$xsl = @new SimpleXMLElement($xsl);
+					$xsl->registerXPathNamespace("sym", "http://www.symphony-cms.com/"); 
+					
+					$rawauthors = $xsl->xpath("sym:author");
+					
+					foreach($rawauthors AS $a) {
+						$authors[] = array('name' => (string) $a->attributes()->name, 'email' => (string) $a->attributes()->email, 'website' => (string) $a->attributes()->website);
+					}
+					
+					$components = $xsl->xpath("*[local-name()='template' or local-name()='function']");
 					
 					foreach($implementors AS $p) {
 						$pagexsl = file_get_contents($p);
@@ -91,9 +101,23 @@
 					else
 						$usingfiles = Widget::TableData(__('None'), 'inactive');
 					
-					$usingfiles->appendChild(Widget::Input('items[' . $u . ']', null, 'checkbox'));
+					if(!empty($authors)) {
+						$author = $authors[0]['name'];
+					
+						if($authors[0]['website'] != "") {
+							$author = Widget::Anchor($authors[0]['name'], General::validateURL($authors[0]['website']));
+						}
+						else if($authors[0]['email']  != "") {
+							$author = Widget::Anchor($authors[0]['name'], 'mailto:' . $authors[0]['email']);
+						}
+						$author = Widget::TableData($author);
+					}
+					else {
+						$author = Widget::TableData(__('Unknown'), 'inactive');
+					}
+					$author->appendChild(Widget::Input('items[' . $u . ']', null, 'checkbox'));
 
-					$aTableBody[] = Widget::TableRow(array($name, $components, $usingfiles, $linkingfiles), null);
+					$aTableBody[] = Widget::TableRow(array($name, $components, $usingfiles, $linkingfiles, $author), null);
 				}
 			}
 
