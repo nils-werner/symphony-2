@@ -70,8 +70,8 @@
 						
 						foreach($components AS $c) {
 							if(
-								( $c->getName() == "template" && $c->attributes()->name && $pagexsl->xpath("*[local-name()='call-template' and @name = '" . $c->attributes()->name . "']") ) ||
-								( $c->getName() == "function" && $c->attributes()->name && $pagexsl->xpath("//*[contains(@select,'" . $c->attributes()->name . "')]") )
+								( $c->getName() == "template" && $c->attributes()->name && $pagexsl->xpath("//*[local-name()='call-template' and @name = '" . $c->attributes()->name . "']") ) ||
+								( $c->getName() == "function" && $c->attributes()->name && $pagexsl->xpath("//*[contains(@select,'" . $c->attributes()->name . "(')]") )
 							)
 							$using[] = $p;
 						}
