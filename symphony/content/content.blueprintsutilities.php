@@ -25,6 +25,7 @@
 
 			$aTableHead = array(
 				array(__('Name'), 'col'),
+				array(__('Components'), 'col')
 			);
 
 			$aTableBody = array();
@@ -41,10 +42,15 @@
 							$u,
 							SYMPHONY_URL . '/blueprints/utilities/edit/' . str_replace('.xsl', '', $u) . '/')
 					);
+					
+					$xsl = file_get_contents(UTILITIES . '/' .  $u);
+					$xsl = @new SimpleXMLElement($xsl);
+					
+					$components = Widget::TableData(count($xsl->xpath("*[local-name()='template' or local-name()='function']")));
+					
+					$components->appendChild(Widget::Input('items[' . $u . ']', null, 'checkbox'));
 
-					$name->appendChild(Widget::Input('items[' . $u . ']', null, 'checkbox'));
-
-					$aTableBody[] = Widget::TableRow(array($name));
+					$aTableBody[] = Widget::TableRow(array($name, $components), null);
 				}
 			}
 
