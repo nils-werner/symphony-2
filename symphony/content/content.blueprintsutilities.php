@@ -71,6 +71,7 @@
 						foreach($components AS $c) {
 							if(
 								( $c->getName() == "template" && $c->attributes()->name && $pagexsl->xpath("//*[local-name()='call-template' and @name = '" . $c->attributes()->name . "']") ) ||
+								( $c->getName() == "template" && $c->attributes()->match && $c->attributes()->mode && $pagexsl->xpath("//*[local-name()='apply-templates' and @mode = '" . $c->attributes()->mode . "']") ) ||
 								( $c->getName() == "function" && $c->attributes()->name && $pagexsl->xpath("//*[contains(@select,'" . $c->attributes()->name . "(')]") )
 							)
 							$using[] = $p;
