@@ -25,7 +25,9 @@
 
 			$aTableHead = array(
 				array(__('Name'), 'col'),
-				array(__('Components'), 'col')
+				array(__('Components'), 'col'),
+				array(__('Used in'), 'col'),
+				array(__('Linked from'), 'col')
 			);
 
 			$aTableBody = array();
@@ -36,6 +38,15 @@
 				);
 			}
 			else {
+				
+				$bOdd = true;
+
+				$implementors = General::listStructure(PAGES, array('xsl'), false, 'asc', PAGES);
+				$implementors = array_merge(
+												array_map(function($item) { return PAGES . "/" . $item; }, $implementors['filelist']),
+												array_map(function($item) { return UTILITIES . "/" . $item; }, $utilities)
+											);
+				
 				foreach($utilities as $u) {
 					$name = Widget::TableData(
 						Widget::Anchor(
@@ -46,11 +57,42 @@
 					$xsl = file_get_contents(UTILITIES . '/' .  $u);
 					$xsl = @new SimpleXMLElement($xsl);
 					
-					$components = Widget::TableData(count($xsl->xpath("*[local-name()='template' or local-name()='function']")));
+					$components = $xsl->xpath("*[local-name()='template' or local-name()='function']");
+					$linking = array();
+					$using = array();
 					
-					$components->appendChild(Widget::Input('items[' . $u . ']', null, 'checkbox'));
+					foreach($implementors AS $p) {
+						$pagexsl = file_get_contents($p);
+						$pagexsl = @new SimpleXMLElement($pagexsl);
+						
+						if($pagexsl->xpath("*[local-name()='include' or local-name()='import'][contains(@href,'utilities/" . $u . "')]"))
+							$linking[] = $p;
+						
+						foreach($components AS $c) {
+							if(
+								( $c->getName() == "template" && $c->attributes()->name && $pagexsl->xpath("*[local-name()='call-template' and @name = '" . $c->attributes()->name . "']") ) ||
+								( $c->getName() == "function" && $c->attributes()->name && $pagexsl->xpath("//*[contains(@select,'" . $c->attributes()->name . "')]") )
+							)
+							$using[] = $p;
+						}
+						
+					}
+					
+					$components = Widget::TableData(count($components));
+					
+					if(!empty($linking))
+						$linkingfiles = Widget::TableData(implode(',', array_map(function($item) { return basename($item); }, $linking)));
+					else
+						$linkingfiles = Widget::TableData(__('None'), 'inactive');
+					
+					if(!empty($using))
+						$usingfiles = Widget::TableData(implode(',', array_map(function($item) { return basename($item); }, $using)));
+					else
+						$usingfiles = Widget::TableData(__('None'), 'inactive');
+					
+					$usingfiles->appendChild(Widget::Input('items[' . $u . ']', null, 'checkbox'));
 
-					$aTableBody[] = Widget::TableRow(array($name, $components), null);
+					$aTableBody[] = Widget::TableRow(array($name, $components, $usingfiles, $linkingfiles), null);
 				}
 			}
 
