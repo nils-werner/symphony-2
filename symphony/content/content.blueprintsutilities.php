@@ -82,12 +82,12 @@
 					$components = Widget::TableData(count($components));
 					
 					if(!empty($linking))
-						$linkingfiles = Widget::TableData(implode(',', array_map(function($item) { return basename($item); }, $linking)));
+						$linkingfiles = Widget::TableData(implode(', ', array_map(function($item) { return basename($item); }, $linking)));
 					else
 						$linkingfiles = Widget::TableData(__('None'), 'inactive');
 					
 					if(!empty($using))
-						$usingfiles = Widget::TableData(implode(',', array_map(function($item) { return basename($item); }, $using)));
+						$usingfiles = Widget::TableData(implode(', ', array_map(function($item) { return basename($item); }, $using)));
 					else
 						$usingfiles = Widget::TableData(__('None'), 'inactive');
 					
