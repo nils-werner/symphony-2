@@ -114,8 +114,11 @@
 						}
 						catch (ReflectionException $e) {}
 
+						$properties = get_class_vars($classname);
+
 						$about['can_parse'] = $can_parse;
 						$about['source'] = $source;
+						$about['filters'] = $properties['eParamFILTERS'];
 						$result[$f] = $about;
 					}
 				}
