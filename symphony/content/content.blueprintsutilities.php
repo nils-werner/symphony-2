@@ -72,6 +72,9 @@
 					$components = $xsl->xpath("*[local-name()='template' or local-name()='function']");
 					
 					foreach($implementors AS $p) {
+						if(UTILITIES . "/" .  $u == $p)
+							continue;
+						
 						$pagexsl = file_get_contents($p);
 						$pagexsl = @new SimpleXMLElement($pagexsl);
 						
@@ -80,11 +83,14 @@
 						
 						foreach($components AS $c) {
 							if(
-								( $c->getName() == "template" && $c->attributes()->name && $pagexsl->xpath("//*[local-name()='call-template' and @name = '" . $c->attributes()->name . "']") ) ||
-								( $c->getName() == "template" && $c->attributes()->match && $c->attributes()->mode && $pagexsl->xpath("//*[local-name()='apply-templates' and @mode = '" . $c->attributes()->mode . "']") ) ||
-								( $c->getName() == "function" && $c->attributes()->name && $pagexsl->xpath("//*[contains(@select,'" . $c->attributes()->name . "(')]") )
+								(
+									( $c->getName() == "template" && $c->attributes()->name && $pagexsl->xpath("//*[local-name()='call-template' and @name = '" . $c->attributes()->name . "']") ) ||
+									( $c->getName() == "template" && $c->attributes()->match && $c->attributes()->mode && $pagexsl->xpath("//*[local-name()='apply-templates' and @mode = '" . $c->attributes()->mode . "']") ) ||
+									( $c->getName() == "function" && $c->attributes()->name && $pagexsl->xpath("//*[contains(@select,'" . $c->attributes()->name . "(')]") )
+								)
+								&& !in_array($p, $using)
 							)
-							$using[] = $p;
+								$using[] = $p;
 						}
 						
 					}
