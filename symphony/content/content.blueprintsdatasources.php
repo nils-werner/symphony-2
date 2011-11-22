@@ -101,6 +101,10 @@
 
 							$params = $params[0];
 
+							if($params == array()) {
+								$params = array($f);
+							}
+
 							if(is_numeric($key)) {
 								$field = FieldManager::Fetch($key);
 								$label = $field->label();
