@@ -97,7 +97,29 @@
 						$section = Widget::TableData(__('Unknown'), 'inactive');
 					}
 
-					$filters = Widget::TableData(count($r['filters']));
+					$fields = array();
+
+					foreach($r['filters'] AS $key => $f) {
+						preg_match_all('/(\$[a-zA-Z\.-]+)/', $f, $params);
+
+						$params = $params[0];
+
+						if(is_numeric($key)) {
+							$field = FieldManager::Fetch($key);
+							$label = $field->label();
+						}
+						else {
+							if($key == "system:date")
+								$label = __("System Date");
+							if($key == "id")
+								$label = __("System ID");
+						}
+
+						$span = new XMLElement('span', implode(', ', $params), array('class' => 'inactive'));
+						$fields[] = $label . ": " . $span->generate();
+					}
+
+					$filters = Widget::TableData(implode('<br />', $fields));
 
 					if($r["can_parse"])
 						$custom = Widget::TableData(__("No"));
