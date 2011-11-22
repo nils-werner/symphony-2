@@ -38,13 +38,16 @@
 					'handle' => 'source'
 				),
 				array(
-					'label' => __('Pages'),
-					'sortable' => false,
+					'label' => __('Filters'),
+					'sortable' => false
 				),
 				array(
-					'label' => __('Release Date'),
-					'sortable' => true,
-					'handle' => 'release-date'
+					'label' => __('Pages'),
+					'sortable' => false
+				),
+				array(
+					'label' => __('Custom PHP '),
+					'sortable' => false
 				),
 				array(
 					'label' => __('Author'),
@@ -94,6 +97,13 @@
 						$section = Widget::TableData(__('Unknown'), 'inactive');
 					}
 
+					$filters = Widget::TableData(count($r['filters']));
+
+					if($r["can_parse"])
+						$custom = Widget::TableData(__("No"));
+					else
+						$custom = Widget::TableData(__("Yes"));
+
 					// Attached pages
 					$pages = ResourceManager::getAttachedPages(RESOURCE_TYPE_DS, $r['handle']);
 
@@ -136,7 +146,7 @@
 					$author = Widget::TableData($author);
 					$author->appendChild(Widget::Input('items[' . $r['handle'] . ']', null, 'checkbox'));
 
-					$aTableBody[] = Widget::TableRow(array($name, $section, $pagelinks, $releasedate, $author), null);
+					$aTableBody[] = Widget::TableRow(array($name, $section, $filters, $pagelinks, $custom, $author), null);
 				}
 			}
 
