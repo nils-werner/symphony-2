@@ -91,7 +91,13 @@
 						$section = Widget::TableData(__('Unknown'), 'inactive');
 					}
 
-					$filters = Widget::TableData(implode(', ',$r['filters']));
+					if(!empty($r['filters'])) {
+						$filters = Widget::TableData(implode(', ',$r['filters']));
+					}
+					else {
+						$filters = Widget::TableData(__('None'), 'inactive');
+					}
+						
 
 					if(!$r["can_parse"])
 						$filters = Widget::TableData(__('Custom PHP'), 'inactive');
