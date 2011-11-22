@@ -44,10 +44,6 @@
 					'sortable' => false
 				),
 				array(
-					'label' => __('Custom PHP'),
-					'sortable' => false
-				),
-				array(
 					'label' => __('Author'),
 					'sortable' => true,
 					'handle' => 'author'
@@ -97,10 +93,8 @@
 
 					$filters = Widget::TableData(implode(', ',$r['filters']));
 
-					if($r["can_parse"])
-						$custom = Widget::TableData(__("No"));
-					else
-						$custom = Widget::TableData(__("Yes"));
+					if(!$r["can_parse"])
+						$filters = Widget::TableData(__('Custom PHP'), 'inactive');
 
 					// Attached pages
 					$pages = ResourceManager::getAttachedPages(RESOURCE_TYPE_EVENT, $r['handle']);
@@ -144,7 +138,7 @@
 					$author = Widget::TableData($author);
 					$author->appendChild(Widget::Input('items[' . $r['handle'] . ']', null, 'checkbox'));
 
-					$aTableBody[] = Widget::TableRow(array($name, $section, $filters, $pagelinks, $custom, $author), null);
+					$aTableBody[] = Widget::TableRow(array($name, $section, $filters, $pagelinks, $author), null);
 				}
 			}
 
