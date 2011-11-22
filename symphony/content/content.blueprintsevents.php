@@ -95,7 +95,7 @@
 						$section = Widget::TableData(__('Unknown'), 'inactive');
 					}
 
-					$filters = Widget::TableData(count($r['filters']));
+					$filters = Widget::TableData(implode(', ',$r['filters']));
 
 					if($r["can_parse"])
 						$custom = Widget::TableData(__("No"));
