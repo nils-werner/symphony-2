@@ -11,6 +11,7 @@
 	require_once(TOOLKIT . '/class.sectionmanager.php');
 	require_once(TOOLKIT . '/class.fieldmanager.php');
 	require_once(TOOLKIT . '/class.entrymanager.php');
+	require_once(TOOLKIT . '/class.datasourcemanager.php');
 
 	Class contentBlueprintsSections extends AdministrationPage{
 
@@ -26,6 +27,7 @@
 			$aTableHead = array(
 				array(__('Name'), 'col'),
 				array(__('Entries'), 'col'),
+				array(__('Data Sources'), 'col'),
 				array(__('Navigation Group'), 'col')
 			);
 
@@ -38,19 +40,30 @@
 			}
 
 			else{
+
+				$datasources = DatasourceManager::listAll();
+
 				foreach($sections as $s){
 
 					$entry_count = EntryManager::fetchCount($s->get('id'));
 
+					$ds_count = 0;
+
+					foreach($datasources AS $d) {
+						if($d['source'] == $s->get('id'))
+							$ds_count++;
+					}
+
 					// Setup each cell
 					$td1 = Widget::TableData(Widget::Anchor($s->get('name'), Administration::instance()->getCurrentPageURL() . 'edit/' . $s->get('id') .'/', NULL, 'content'));
 					$td2 = Widget::TableData(Widget::Anchor("$entry_count", SYMPHONY_URL . '/publish/' . $s->get('handle') . '/'));
-					$td3 = Widget::TableData($s->get('navigation_group'));
+					$td3 = Widget::TableData($ds_count);
+					$td4 = Widget::TableData($s->get('navigation_group'));
 
-					$td3->appendChild(Widget::Input('items['.$s->get('id').']', 'on', 'checkbox'));
+					$td4->appendChild(Widget::Input('items['.$s->get('id').']', 'on', 'checkbox'));
 
 					// Add a row to the body array, assigning each cell to the row
-					$aTableBody[] = Widget::TableRow(array($td1, $td2, $td3));
+					$aTableBody[] = Widget::TableRow(array($td1, $td2, $td3, $td4));
 
 				}
 			}
