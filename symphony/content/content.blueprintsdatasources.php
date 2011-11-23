@@ -126,7 +126,7 @@
 					}
 
 					if(!$r["can_parse"])
-						$filters = Widget::TableData(__('Custom PHP'), 'inactive');
+						$filters = Widget::TableData(__('Custom'), 'inactive');
 
 					// Attached pages
 					$pages = ResourceManager::getAttachedPages(RESOURCE_TYPE_DS, $r['handle']);
