@@ -78,8 +78,13 @@
 						$pagexsl = file_get_contents($p);
 						$pagexsl = @new SimpleXMLElement($pagexsl);
 						
-						if($pagexsl->xpath("*[local-name()='include' or local-name()='import'][contains(@href,'utilities/" . $u . "')]"))
-							$linking[] = $p;
+						$includes = $pagexsl->xpath("*[local-name()='include' or local-name()='import']");
+
+						foreach($includes AS $i) {
+							if(realpath(UTILITIES . "/" .  $u) == realpath(UTILITIES . "/" . (string) $i->attributes()->href)) {
+								$linking[] = $p;
+							}
+						}
 						
 						foreach($components AS $c) {
 							if(
