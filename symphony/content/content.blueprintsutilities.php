@@ -42,10 +42,9 @@
 				
 				$bOdd = true;
 
-				$implementors = General::listStructure(PAGES, array('xsl'), false, 'asc', PAGES);
 				$implementors = array_merge(
-												array_map(function($item) { return PAGES . "/" . $item; }, $implementors['filelist']),
-												array_map(function($item) { return UTILITIES . "/" . $item; }, $utilities)
+												end(General::listStructure(UTILITIES, array('xsl'), false, 'asc')),
+												end(General::listStructure(PAGES, array('xsl'), false, 'asc'))
 											);
 				
 				foreach($utilities as $u) {
