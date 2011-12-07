@@ -107,7 +107,7 @@
 
 							if(is_numeric($key)) {
 								$field = FieldManager::Fetch($key);
-								$label = $field->label();
+								$label = $field->get('label');
 							}
 							else {
 								if($key == "system:date")
