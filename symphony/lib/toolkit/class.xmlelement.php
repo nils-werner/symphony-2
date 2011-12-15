@@ -141,7 +141,10 @@
 			$this->_dom = new DomDocument("1.0", "UTF-8");
 			$this->_element = $this->_dom->createElement($name);
 
-			$this->setValue(($value instanceof XMLElement) ? $value->generate(false) : $value);
+			if($value instanceof XMLElement)
+				$this->appendChild($value);
+			else
+				$this->setValue($value);
 
 			if(is_array($attributes) && !empty($attributes)) {
 				$this->setAttributeArray($attributes);
@@ -173,7 +176,7 @@
 		 * @return string|XMLElement
 		 */
 		public function getValue(){
-			return $this->_value;
+			return $this->_element->nodeValue;
 		}
 
 		/**
