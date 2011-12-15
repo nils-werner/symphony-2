@@ -224,9 +224,7 @@
 		 */
 		public function getChildrenByName($name) {
 			$result = array();
-			foreach($this->_children as $i => $child) {
-				if($child->getName() != $name) continue;
-
+			foreach($this->_element->getElementsByTagName($name) as $i => $child) {
 				$result[$i] = $child;
 			}
 
