@@ -23,10 +23,16 @@
 		);
 
 		/**
-		 * The name of the HTML Element, eg. 'p'
-		 * @var string
+		 * The DOMDocument instance
+		 * @var DOMDocument
 		 */
-		private $_name;
+		private $_dom;
+
+		/**
+		 * The DOMElement element
+		 * @var DOMNode
+		 */
+		private $_element;
 
 		/**
 		 * The value of this XMLElement, it can be a string or another XMLElement object.
@@ -130,8 +136,11 @@
 		 * @return XMLElement
 		 */
 		public function __construct($name, $value = null, Array $attributes = array(), $createHandle = false){
+			$name = ($createHandle) ? Lang::createHandle($name) : $name;
 
-			$this->_name = ($createHandle) ? Lang::createHandle($name) : $name;
+			$this->_dom = new DomDocument("1.0", "UTF-8");
+			$this->_element = $this->_dom->createElement($name);
+
 			$this->setValue(($value instanceof XMLElement) ? $value->generate(false) : $value);
 
 			if(is_array($attributes) && !empty($attributes)) {
@@ -140,12 +149,22 @@
 		}
 
 		/**
-		 * Accessor for `$_name`
+		 * Accessor for `$_element`
+		 *
+		 * @return string
+		 */
+		public function getElement(){
+			return $this->_element;
+		}
+
+
+		/**
+		 * Accessor for `$_element->tagName`
 		 *
 		 * @return string
 		 */
 		public function getName(){
-			return $this->_name;
+			return $this->_element->tagName;
 		}
 
 		/**
@@ -164,8 +183,7 @@
 		 * @return string
 		 */
 		public function getAttribute($name){
-			if(!isset($this->_attributes[$name])) return null;
-			return $this->_attributes[$name];
+			return $this->_element->getAttribute($name);
 		}
 
 		/**
@@ -174,7 +192,9 @@
 		 * @return array
 		 */
 		public function getAttributes(){
-			return $this->_attributes;
+			$ret = array();
+			for($i = 0; $i < $this->_element->attributes->length; $i++)
+				$ret[] = $this->_element->attributes->item($i);
 		}
 
 		/**
@@ -183,7 +203,9 @@
 		 * @return array
 		 */
 		public function getChildren(){
-			return $this->_children;
+			$ret = array();
+			for($i = 0; $i < $this->_element->childNodes->length; $i++)
+				$ret[] = $this->_element->childNodes->item($i);
 		}
 
 		/**
@@ -303,8 +325,8 @@
 		 *  Defaults to true.
 		 */
 		public function setValue($value, $prepend=true){
-			if(!$prepend) $this->_placeValueAfterChildElements = true;
-			$this->_value = $value;
+			if(!$prepend) $this->_element->appendChild($this->_dom->createTextNode($value));
+			else $this->_element->insertBefore($this->_dom->createTextNode($value), $this->_element->firstChild);
 		}
 
 		/**
@@ -316,7 +338,7 @@
 		 *  The value of the attribute
 		 */
 		public function setAttribute($name, $value){
-			$this->_attributes[$name] = $value;
+			$this->_element->setAttribute($name, $value);
 		}
 
 		/**
@@ -346,7 +368,7 @@
 		 * @return boolean
 		 */
 		public function setChildren(Array $children = null) {
-			$this->_children = $children;
+			$this->appendChildArray($children);
 
 			return true;
 		}
@@ -357,7 +379,7 @@
 		 * @param XMLElement $child
 		 */
 		public function appendChild(XMLElement $child){
-			$this->_children[] = $child;
+			$this->_element->appendChild($this->_dom->importNode($child->getElement()));
 
 			return true;
 		}
@@ -371,7 +393,7 @@
 		public function appendChildArray(Array $children = null){
 			if(is_array($children) && !empty($children)) {
 				foreach($children as $child)
-					$this->appendChild($child);
+					$this->appendChild($child->getElement());
 			}
 		}
 
@@ -383,7 +405,7 @@
 		 * @param XMLElement $child
 		 */
 		public function prependChild(XMLElement $child){
-			array_unshift($this->_children, $child);
+			$this->_element->insertBefore($this->_dom->importNode($child->getElement()), $this->_element->firstChild);
 		}
 
 		/**
@@ -427,7 +449,7 @@
 		 * @return integer
 		 */
 		public function getNumberOfChildren(){
-			return count($this->_children);
+			return $this->_element->childNodes->length;
 		}
 
 		/**
@@ -444,13 +466,7 @@
 		 *  True if child was successfully removed, false otherwise.
 		 */
 		public function removeChildAt($index) {
-			if(!is_numeric($index)) return false;
-
-			$index = $this->getRealIndex($index);
-
-			if(!isset($this->_children[$index])) return false;
-
-			unset($this->_children[$index]);
+			$this->_element->removeChild($this->_element->childNodes->item($index));
 
 			return true;
 		}
@@ -473,21 +489,7 @@
 		public function insertChildAt($index, XMLElement $child = null) {
 			if(!is_numeric($index)) return false;
 
-			if($index >= $this->getNumberOfChildren()) {
-				return $this->appendChild($child);
-			}
-
-			$start = array_slice($this->_children, 0, $index);
-			$end = array_slice($this->_children, $index);
-
-			$merge = array_merge(
-				$start, array(
-					$index => $child
-				),
-				$end
-			);
-
-			return $this->setChildren($merge);
+			$this->_element->insertBefore($this->_dom->importNode($child->getElement()), $this->_element->childNodes->item($index));
 		}
 
 		/**
@@ -506,30 +508,7 @@
 		public function replaceChildAt($index, XMLElement $child = null) {
 			if(!is_numeric($index)) return false;
 
-			$index = $this->getRealIndex($index);
-
-			if(!isset($this->_children[$index])) return false;
-
-			$this->_children[$index] = $child;
-
-			return true;
-		}
-
-		/**
-		 * Given an `$index`, return the real index in `$this->_children`
-		 * depending on if the value is negative or not. Negative values
-		 * will work from the end of an array.
-		 *
-		 * @since Symphony 2.2.2
-		 * @param integer $index
-		 *  Positive indexes are returned as is, negative indexes are deducted
-		 *  from the end of `$this->_children`
-		 * @return integer
-		 */
-		private function getRealIndex($index) {
-			if($index >= 0) return $index;
-
-			return $this->getNumberOfChildren() + $index;
+			$this->_element->replaceChild($this->_dom->importNode($child->getElement()), $this->_element->childNodes->item($index));
 		}
 
 		/**
