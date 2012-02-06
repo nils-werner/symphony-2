@@ -156,7 +156,10 @@
 
 					case 'static_xml':
 						$existing->grab();
-						$fields['static_xml'] = trim($existing->dsParamSTATIC);
+						if (!isset($existing->dsParamSTATIC))
+							$fields['static_xml'] = trim($existing->dsSTATIC);
+						else
+							$fields['static_xml'] = trim($existing->dsParamSTATIC);
 						break;
 
 					default:
