@@ -791,6 +791,7 @@
 			// Editing an entry, so need to create some various objects
 			else {
 				$entry = $existingEntry;
+				$fields = array();
 
 				if (!$section) {
 					$section = SectionManager::fetch($entry->get('section_id'));
