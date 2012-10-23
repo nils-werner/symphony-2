@@ -1000,6 +1000,9 @@
 				$prefix .= "/";
 			}
 
+			$files['dirlist'] = array();
+			$files['filelist'] = array();
+
 			foreach(scandir($dir) as $file) {
 				if (
 					($file == '.' or $file == '..')
