@@ -239,7 +239,8 @@
 						$field_pool[$column->get('id')] = $column;
 					}
 				}
-				$link_column = end(array_reverse($visible_columns));
+				$link_column = array_reverse($visible_columns);
+				$link_column = end($link_column);
 				reset($visible_columns);
 
 				foreach($entries['records'] as $entry) {
@@ -790,6 +791,7 @@
 			// Editing an entry, so need to create some various objects
 			else {
 				$entry = $existingEntry;
+				$fields = array();
 
 				if (!$section) {
 					$section = SectionManager::fetch($entry->get('section_id'));
