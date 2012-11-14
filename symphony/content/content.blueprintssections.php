@@ -105,10 +105,8 @@
 
 			$types = array();
 
-			$m = array('name'=>null, 'something'=>null);
-
 			$fields = (isset($_POST['fields']) && is_array($_POST['fields'])) ? $_POST['fields'] : array();
-			$meta = (isset($_POST['meta']) && is_array($_POST['meta'])) ? $_POST['fields'] : array('name'=>null);
+			$meta = (isset($_POST['meta']) && is_array($_POST['meta'])) ? $_POST['meta'] : array('name'=>null);
 
 			$formHasErrors = (is_array($this->_errors) && !empty($this->_errors));
 
@@ -138,13 +136,13 @@
 			$namediv = new XMLElement('div', NULL, array('class' => 'column'));
 
 			$label = Widget::Label(__('Name'));
-			$label->appendChild(Widget::Input('meta[name]', General::sanitize($meta['name'])));
+			$label->appendChild(Widget::Input('meta[name]', (isset($meta['name']) ? General::sanitize($meta['name']) : null)));
 
 			if(isset($this->_errors['name'])) $namediv->appendChild(Widget::Error($label, $this->_errors['name']));
 			else $namediv->appendChild($label);
 
 			$label = Widget::Label();
-			$input = Widget::Input('meta[hidden]', 'yes', 'checkbox', ($meta['hidden'] == 'yes' ? array('checked' => 'checked') : NULL));
+			$input = Widget::Input('meta[hidden]', 'yes', 'checkbox', ($meta['hidden'] == 'yes' ? array('checked' => 'checked') : null));
 			$label->setValue(__('%s Hide this section from the back-end menu', array($input->generate(false))));
 			$namediv->appendChild($label);
 			$div->appendChild($namediv);
@@ -546,7 +544,7 @@
 				$edit = ($this->_context[0] == "edit");
 				$this->_errors = array();
 
-				$fields = $_POST['fields'];
+				$fields = isset($_POST['fields']) ? $_POST['fields'] : array();
 				$meta = $_POST['meta'];
 
 				if($edit) {
@@ -610,7 +608,7 @@
 							$field = FieldManager::create($data['type']);
 							$field->setFromPOST($data);
 
-							if($existing_section) {
+							if(isset($existing_section)) {
 								$field->set('parent_section', $existing_section->get('id'));
 							}
 
