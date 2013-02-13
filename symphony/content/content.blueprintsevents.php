@@ -15,14 +15,15 @@
 		public $_errors = array();
 
 		public function __viewIndex($resource_type) {
-			parent::__viewIndex(RESOURCE_TYPE_EVENT);
+			$resource_type = RESOURCE_TYPE_EVENT;
+			parent::__viewIndex($resource_type);
 
 			$this->setTitle(__('%1$s &ndash; %2$s', array(__('Events'), __('Symphony'))));
 			$this->appendSubheading(__('Events'), Widget::Anchor(__('Create New'), Administration::instance()->getCurrentPageURL().'new/', __('Create a new event'), 'create button', NULL, array('accesskey' => 'c')));
 
 			$this->setPageType('table');
 
-			Sortable::initialize($this, $resources, $sort, $order);
+			Sortable::initialize($this, $resources, $sort, $order, array('type' => $resource_type));
 
 			$columns = array(
 				array(

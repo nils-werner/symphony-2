@@ -17,14 +17,15 @@
 		public $_errors = array();
 
 		public function __viewIndex($resource_type){
-			parent::__viewIndex(RESOURCE_TYPE_DS);
+			$resource_type = RESOURCE_TYPE_DS;
+			parent::__viewIndex($resource_type);
 
 			$this->setTitle(__('%1$s &ndash; %2$s', array(__('Data Sources'), __('Symphony'))));
 			$this->appendSubheading(__('Data Sources'), Widget::Anchor(__('Create New'), Administration::instance()->getCurrentPageURL().'new/', __('Create a new data source'), 'create button', NULL, array('accesskey' => 'c')));
 
 			$this->setPageType('table');
 
-			Sortable::initialize($this, $resources, $sort, $order);
+			Sortable::initialize($this, $resources, $sort, $order, array('type' => $resource_type));
 
 			$columns = array(
 				array(
